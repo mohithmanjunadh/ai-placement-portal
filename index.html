@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Based Student Placement Portal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Glowing Orbs -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <!-- Main Container -->
+    <div id="app-container">
+        
+        <!-- Toast Notification Container -->
+        <div id="toast-container"></div>
+
+        <!-- ================= AUTH VIEW ================= -->
+        <div id="auth-view" class="view-panel active">
+            <div class="auth-card glass-panel">
+                <div class="auth-header">
+                    <div class="logo">
+                        <i class="fa-solid fa-graduation-cap logo-icon"></i>
+                        <span>NexGen<span class="highlight">Align</span></span>
+                    </div>
+                    <h2>AI-Powered Placement Portal</h2>
+                    <p class="subtitle">Connecting talent with opportunities using smart intelligence</p>
+                </div>
+
+                <!-- Tab Buttons -->
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchAuthTab('login')">Login</button>
+                    <button class="tab-btn" onclick="switchAuthTab('register')">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="login-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                        <input type="email" id="login-email" required placeholder="name@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password"><i class="fa-solid fa-lock"></i> Password</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Sign In <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    </button>
+                </form>
+
+                <!-- Register Form (Hidden initially) -->
+                <form id="register-form" class="auth-form hidden" onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-user-tag"></i> Join As</label>
+                        <div class="role-selector">
+                            <label class="role-option">
+                                <input type="radio" name="reg-role" value="student" checked onchange="toggleRegFields('student')">
+                                <div class="role-box">
+                                    <i class="fa-solid fa-user-graduate"></i>
+                                    <span>Student</span>
+                                </div>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="reg-role" value="company" onchange="toggleRegFields('company')">
+                                <div class="role-box">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                    <span>Company</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-name" id="label-reg-name"><i class="fa-solid fa-user"></i> Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="John Doe">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                        <input type="email" id="reg-email" required placeholder="email@domain.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-password"><i class="fa-solid fa-lock"></i> Password</label>
+                        <input type="password" id="reg-password" required placeholder="Minimum 6 characters">
+                    </div>
+
+                    <!-- Student-Specific Fields -->
+                    <div id="student-reg-fields" class="conditional-fields">
+                        <div class="input-group">
+                            <label for="reg-skills"><i class="fa-solid fa-code"></i> Skills (Comma Separated)</label>
+                            <input type="text" id="reg-skills" placeholder="JavaScript, Python, React, SQL">
+                        </div>
+                        <div class="grid-fields">
+                            <div class="input-group">
+                                <label for="reg-degree"><i class="fa-solid fa-award"></i> Degree</label>
+                                <input type="text" id="reg-degree" placeholder="B.Tech Computer Science">
+                            </div>
+                            <div class="input-group">
+                                <label for="reg-grad-year"><i class="fa-solid fa-calendar-days"></i> Grad Year</label>
+                                <input type="number" id="reg-grad-year" placeholder="2027" min="2020" max="2035">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Company-Specific Fields -->
+                    <div id="company-reg-fields" class="conditional-fields hidden">
+                        <div class="input-group">
+                            <label for="reg-industry"><i class="fa-solid fa-industry"></i> Industry</label>
+                            <input type="text" id="reg-industry" placeholder="Technology, Finance, Healthcare">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-accent btn-full">
+                        Create Account <i class="fa-solid fa-user-plus"></i>
+                    </button>
+                </form>
+
+                <!-- Seed Helper -->
+                <div class="demo-accounts">
+                    <h4>Quick Login Demo Accounts:</h4>
+                    <div class="demo-badges">
+                        <span onclick="fillDemo('student')">Student</span>
+                        <span onclick="fillDemo('company')">Company</span>
+                        <span onclick="fillDemo('admin')">Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= MAIN DASHBOARD VIEWS ================= -->
+        <div id="dashboard-view" class="view-panel hidden">
+            <!-- Sidebar -->
+            <aside class="sidebar glass-panel">
+                <div class="sidebar-header">
+                    <div class="logo">
+                        <i class="fa-solid fa-graduation-cap logo-icon"></i>
+                        <span>NexGen<span class="highlight">Align</span></span>
+                    </div>
+                    <div class="user-profile-badge">
+                        <div class="user-avatar" id="sidebar-avatar">U</div>
+                        <div class="user-info-text">
+                            <h4 id="sidebar-user-name">User Name</h4>
+                            <span id="sidebar-user-role" class="badge">Student</span>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <!-- Navigation dynamically populated by app.js based on role -->
+                    <ul id="sidebar-menu">
+                        <!-- Dynamic items -->
+                    </ul>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <button class="btn btn-danger btn-full" onclick="handleLogout()">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Top Nav Bar -->
+                <header class="top-nav glass-panel">
+                    <div class="welcome-msg">
+                        <h1 id="welcome-title">Welcome Back!</h1>
+                        <p id="welcome-subtitle">Here is what is happening today.</p>
+                    </div>
+                    <div class="header-actions">
+                        <div class="datetime">
+                            <i class="fa-regular fa-calendar-days"></i>
+                            <span id="current-date-time">Jul 4, 2026</span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Page Container -->
+                <div id="page-content" class="page-container">
+                    <!-- Dynamic views are loaded here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ================= DYNAMIC MODALS ================= -->
+    <div id="modal-container" class="modal-overlay hidden">
+        <!-- Modals will be loaded here dynamically -->
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>
